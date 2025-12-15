@@ -1,0 +1,12 @@
+{
+  "name": "integration-runner",
+  "version": "0.1.0",
+  "description": "A small batch integration runner for processing CSV files with retries, backoff and simple rate limiting.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node src/index.js sample-data/orders.csv"
+  },
+  "author": "Ram Be'er",
+  "license": "MIT"
+}
