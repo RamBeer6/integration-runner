@@ -40,3 +40,23 @@ test("loadCsv rejects rows with the wrong number of columns", async () => {
 
   await assert.rejects(() => loadCsv(csvPath), /Invalid CSV row/);
 });
+
+test("loadCsv rejects an empty physical file", async () => {
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "integration-runner-"));
+  const csvPath = path.join(dir, "empty.csv");
+  await fs.writeFile(csvPath, "", "utf8");
+
+  await assert.rejects(() => loadCsv(csvPath), /CSV input file is empty/);
+});
+
+test("loadCsv rejects unmatched quotes in a row", async () => {
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "integration-runner-"));
+  const csvPath = path.join(dir, "bad-quotes.csv");
+  await fs.writeFile(
+    csvPath,
+    'id,customer,amount,endpoint\n1,"Alpha Ltd,120.50,/orders\n',
+    "utf8",
+  );
+
+  await assert.rejects(() => loadCsv(csvPath), /unmatched quote/);
+});
