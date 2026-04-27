@@ -107,6 +107,7 @@ More detail is available in:
 - `docs/architecture.md`
 - `docs/failure-handling.md`
 - `docs/demo-output.md`
+- `docs/repository-usage.md`
 
 ## Portfolio Positioning
 
