@@ -163,12 +163,3 @@ The important part is that the project shows how I think about reliability in pr
 - I keep the code small enough to test and explain.
 - I package the workflow with Docker and CI so it can run consistently.
 
-## Resume Summary
-
-```text
-Integration Runner - Reliable Workflow Execution Engine
-- Built a Node.js CLI tool for executing batch integration jobs from CSV input.
-- Implemented validation, retry logic, exponential backoff, rate limiting, and structured failure handling.
-- Generated JSON execution reports with success/failure metrics, retry statistics, and runtime duration.
-- Added automated tests, Dockerized execution, and GitHub Actions CI.
-```
