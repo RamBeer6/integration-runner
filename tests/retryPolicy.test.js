@@ -1,7 +1,11 @@
 const assert = require("node:assert/strict");
 const test = require("node:test");
 const { IntegrationError } = require("../src/mockIntegration");
-const { executeWithRetry, getBackoffDelay, shouldRetry } = require("../src/retryPolicy");
+const {
+  executeWithRetry,
+  getBackoffDelay,
+  shouldRetry,
+} = require("../src/retryPolicy");
 
 test("getBackoffDelay doubles until max delay", () => {
   assert.equal(getBackoffDelay(1, { baseDelayMs: 10, maxDelayMs: 100 }), 10);
@@ -21,7 +25,9 @@ test("executeWithRetry retries transient failures", async () => {
     async () => {
       calls += 1;
       if (calls < 2) {
-        throw new IntegrationError("Temporary API failure", { transient: true });
+        throw new IntegrationError("Temporary API failure", {
+          transient: true,
+        });
       }
       return "ok";
     },

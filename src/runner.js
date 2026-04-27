@@ -9,11 +9,12 @@ async function runIntegration(options) {
   const startedAt = Date.now();
   const logger = options.logger ?? createLogger();
   const service = options.service ?? createMockIntegrationService();
-  const rateLimiter = options.rateLimiter ?? new RateLimiter(options.rateLimit ?? 5);
+  const rateLimiter =
+    options.rateLimiter ?? new RateLimiter(options.rateLimit ?? 5);
 
   logger.info({ status: "run_started", input: options.input });
 
-  const jobs = options.jobs ?? await loadCsv(options.input);
+  const jobs = options.jobs ?? (await loadCsv(options.input));
   const validated = validateJobs(jobs);
   const results = [];
   const executable = [];
@@ -43,54 +44,63 @@ async function runIntegration(options) {
     executable.push(item.job);
   }
 
-  const executed = await runWithConcurrency(executable, options.concurrency ?? 3, async (job) => {
-    logger.info({ jobId: job.id, status: "started" });
+  const executed = await runWithConcurrency(
+    executable,
+    options.concurrency ?? 3,
+    async (job) => {
+      logger.info({ jobId: job.id, status: "started" });
 
-    try {
-      const execution = await executeWithRetry(
-        (attempt) => rateLimiter.schedule(async () => {
-          logger.info({ jobId: job.id, status: "attempting", attempt });
-          return service(job);
-        }),
-        {
-          retries: options.retries ?? 3,
-          baseDelayMs: options.baseDelayMs,
-          maxDelayMs: options.maxDelayMs,
-          logger: {
-            info: (event) => logger.info({ jobId: job.id, ...event }),
+      try {
+        const execution = await executeWithRetry(
+          (attempt) =>
+            rateLimiter.schedule(async () => {
+              logger.info({ jobId: job.id, status: "attempting", attempt });
+              return service(job);
+            }),
+          {
+            retries: options.retries ?? 3,
+            baseDelayMs: options.baseDelayMs,
+            maxDelayMs: options.maxDelayMs,
+            logger: {
+              info: (event) => logger.info({ jobId: job.id, ...event }),
+            },
           },
-        },
-      );
+        );
 
-      logger.info({ jobId: job.id, status: "succeeded", attempts: execution.attempts });
+        logger.info({
+          jobId: job.id,
+          status: "succeeded",
+          attempts: execution.attempts,
+        });
 
-      return {
-        jobId: job.id,
-        status: "succeeded",
-        attempts: execution.attempts,
-        retries: execution.retries,
-        response: execution.value,
-      };
-    } catch (error) {
-      logger.info({
-        jobId: job.id,
-        status: "failed",
-        attempts: error.attempts ?? 1,
-        reason: error.message,
-        code: error.code,
-      });
+        return {
+          jobId: job.id,
+          status: "succeeded",
+          attempts: execution.attempts,
+          retries: execution.retries,
+          response: execution.value,
+        };
+      } catch (error) {
+        logger.info({
+          jobId: job.id,
+          status: "failed",
+          attempts: error.attempts ?? 1,
+          reason: error.message,
+          code: error.code,
+        });
 
-      return {
-        jobId: job.id,
-        status: "failed",
-        attempts: error.attempts ?? 1,
-        retries: error.retries ?? 0,
-        errorType: error.transient ? "transient" : "permanent",
-        error: error.message,
-        code: error.code,
-      };
-    }
-  });
+        return {
+          jobId: job.id,
+          status: "failed",
+          attempts: error.attempts ?? 1,
+          retries: error.retries ?? 0,
+          errorType: error.transient ? "transient" : "permanent",
+          error: error.message,
+          code: error.code,
+        };
+      }
+    },
+  );
 
   results.push(...executed);
 
@@ -126,10 +136,14 @@ async function runWithConcurrency(items, concurrency, handler) {
 }
 
 function buildSummary(results, durationMs) {
-  const succeeded = results.filter((result) => result.status === "succeeded").length;
+  const succeeded = results.filter(
+    (result) => result.status === "succeeded",
+  ).length;
   const failed = results.filter((result) => result.status === "failed").length;
   const retried = results.reduce((total, result) => total + result.retries, 0);
-  const validationFailed = results.filter((result) => result.errorType === "validation").length;
+  const validationFailed = results.filter(
+    (result) => result.errorType === "validation",
+  ).length;
 
   return {
     totalJobs: results.length,

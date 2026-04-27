@@ -35,7 +35,9 @@ async function loadCsv(filePath) {
     const values = parseCsvLine(trimmed);
 
     if (values.length !== headers.length) {
-      throw new Error(`Invalid CSV row at ${path.basename(filePath)}:${lineNumber}. Expected ${headers.length} columns, got ${values.length}`);
+      throw new Error(
+        `Invalid CSV row at ${path.basename(filePath)}:${lineNumber}. Expected ${headers.length} columns, got ${values.length}`,
+      );
     }
 
     const record = {};
