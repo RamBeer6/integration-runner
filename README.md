@@ -94,6 +94,16 @@ This project demonstrates practical reliability engineering for backend automati
 - producing audit-friendly logs and reports
 - packaging the project with tests, Docker, and CI
 
+Resume-ready summary:
+
+```text
+Integration Runner - Reliable Workflow Execution Engine
+- Built a Node.js CLI tool for executing batch integration jobs from CSV input.
+- Implemented retry logic, exponential backoff, rate limiting, validation, and failure handling for unstable external services.
+- Generated structured execution reports with success/failure metrics, retry statistics, and runtime duration.
+- Added automated tests, Dockerized execution, and GitHub Actions CI to validate reliability.
+```
+
 ## What I Learned
 
 Building Integration Runner reinforces how production automation depends on careful failure handling, observable execution, and repeatable delivery. The goal is not to build an enterprise workflow engine; it is to show the habits needed to design integrations that can fail, recover, and be explained clearly.
