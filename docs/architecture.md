@@ -6,6 +6,20 @@ Integration Runner is organized as a small pipeline of focused modules:
 CSV input -> validation -> runner -> rate limiter -> retry policy -> mock integration -> reporters
 ```
 
+```mermaid
+flowchart LR
+  csv["CSV input"] --> loader["CSV loader"]
+  loader --> validator["Validation layer"]
+  validator --> runner["Runner"]
+  runner --> limiter["Rate limiter"]
+  limiter --> retry["Retry policy"]
+  retry --> service["Mock integration service"]
+  service --> results["Result collector"]
+  results --> console["Console summary"]
+  results --> json["JSON report"]
+  runner --> logs["Structured logs"]
+```
+
 ## Components
 
 - `src/cli.js` parses runtime options and resolves file paths.
