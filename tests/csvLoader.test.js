@@ -6,7 +6,12 @@ const test = require("node:test");
 const { loadCsv, parseCsvLine } = require("../src/csvLoader");
 
 test("parseCsvLine handles quoted commas", () => {
-  assert.deepEqual(parseCsvLine('1,"Alpha, Ltd",120.50,/orders'), ["1", "Alpha, Ltd", "120.50", "/orders"]);
+  assert.deepEqual(parseCsvLine('1,"Alpha, Ltd",120.50,/orders'), [
+    "1",
+    "Alpha, Ltd",
+    "120.50",
+    "/orders",
+  ]);
 });
 
 test("loadCsv reads records from a valid CSV", async () => {
@@ -22,7 +27,10 @@ test("loadCsv reads records from a valid CSV", async () => {
 });
 
 test("loadCsv throws a clear error for a missing file", async () => {
-  await assert.rejects(() => loadCsv("missing.csv"), /CSV input file not found/);
+  await assert.rejects(
+    () => loadCsv("missing.csv"),
+    /CSV input file not found/,
+  );
 });
 
 test("loadCsv rejects rows with the wrong number of columns", async () => {
@@ -31,4 +39,24 @@ test("loadCsv rejects rows with the wrong number of columns", async () => {
   await fs.writeFile(csvPath, "id,customer\n1,Alpha,extra\n", "utf8");
 
   await assert.rejects(() => loadCsv(csvPath), /Invalid CSV row/);
+});
+
+test("loadCsv rejects an empty physical file", async () => {
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "integration-runner-"));
+  const csvPath = path.join(dir, "empty.csv");
+  await fs.writeFile(csvPath, "", "utf8");
+
+  await assert.rejects(() => loadCsv(csvPath), /CSV input file is empty/);
+});
+
+test("loadCsv rejects unmatched quotes in a row", async () => {
+  const dir = await fs.mkdtemp(path.join(os.tmpdir(), "integration-runner-"));
+  const csvPath = path.join(dir, "bad-quotes.csv");
+  await fs.writeFile(
+    csvPath,
+    'id,customer,amount,endpoint\n1,"Alpha Ltd,120.50,/orders\n',
+    "utf8",
+  );
+
+  await assert.rejects(() => loadCsv(csvPath), /unmatched quote/);
 });

@@ -15,7 +15,10 @@ function validateJob(job) {
     errors.push("amount must be numeric");
   }
 
-  if (String(job.endpoint ?? "").trim() && !String(job.endpoint).startsWith("/")) {
+  if (
+    String(job.endpoint ?? "").trim() &&
+    !String(job.endpoint).startsWith("/")
+  ) {
     errors.push("endpoint must start with /");
   }
 

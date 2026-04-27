@@ -20,7 +20,8 @@ class RateLimiter {
         await sleep(waitMs);
       }
 
-      this.nextAvailableAt = Math.max(Date.now(), this.nextAvailableAt) + this.intervalMs;
+      this.nextAvailableAt =
+        Math.max(Date.now(), this.nextAvailableAt) + this.intervalMs;
     });
 
     this.queue = scheduled.catch(() => {});

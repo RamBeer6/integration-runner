@@ -11,7 +11,9 @@ const DEFAULT_OPTIONS = {
 const NUMBER_FLAGS = new Set(["concurrency", "retries", "rateLimit"]);
 
 function normalizeFlagName(flag) {
-  return flag.replace(/^--/, "").replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+  return flag
+    .replace(/^--/, "")
+    .replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
 }
 
 function parseCliArgs(argv = process.argv.slice(2), cwd = process.cwd()) {
@@ -44,7 +46,9 @@ function parseCliArgs(argv = process.argv.slice(2), cwd = process.cwd()) {
       index += 1;
     }
 
-    options[key] = NUMBER_FLAGS.has(key) ? parsePositiveInteger(key, value) : value;
+    options[key] = NUMBER_FLAGS.has(key)
+      ? parsePositiveInteger(key, value)
+      : value;
   }
 
   return {

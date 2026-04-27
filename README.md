@@ -4,6 +4,17 @@ Reliable workflow execution engine for batch integrations.
 
 Integration Runner is a Node.js CLI tool that executes batch integration jobs from CSV input with retries, exponential backoff, rate limiting, structured logs, and JSON reports.
 
+## Contents
+
+- [Why This Project Exists](#why-this-project-exists)
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [CLI Options](#cli-options)
+- [Sample Data](#sample-data)
+- [Docker](#docker)
+- [Architecture](#architecture)
+- [Portfolio Positioning](#portfolio-positioning)
+
 ## Why This Project Exists
 
 Real-world integrations often fail due to temporary API errors, rate limits, malformed records, or unstable external services. This project simulates these conditions and demonstrates how to build resilient automation workflows.
@@ -22,6 +33,11 @@ Real-world integrations often fail due to temporary API errors, rate limits, mal
 - Automated tests and CI pipeline
 
 ## Quick Start
+
+Requirements:
+
+- Node.js 22 or newer
+- npm
 
 ```bash
 npm install
@@ -58,6 +74,14 @@ Duration: 2.1s
 
 The run writes a structured report to `reports/run-summary.json`.
 
+## Sample Data
+
+| File                                 | Purpose                                                         |
+| ------------------------------------ | --------------------------------------------------------------- |
+| `sample-data/orders.csv`             | Valid happy-path batch run                                      |
+| `sample-data/orders-with-errors.csv` | Mixed validation, transient, rate-limit, and permanent failures |
+| `sample-data/empty.csv`              | Header-only input for empty-run behavior                        |
+
 ## Docker
 
 ```bash
@@ -83,6 +107,7 @@ More detail is available in:
 - `docs/architecture.md`
 - `docs/failure-handling.md`
 - `docs/demo-output.md`
+- `docs/repository-usage.md`
 
 ## Portfolio Positioning
 
