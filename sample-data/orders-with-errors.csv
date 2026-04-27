@@ -1,0 +1,8 @@
+id,customer,amount,endpoint
+1,Alpha Ltd,120.50,/orders
+2,,75.00,/orders
+3,Gamma LLC,not-a-number,/orders
+4,Delta Corp,49.95,orders
+5,Epsilon Ltd,310.25,/unstable/orders
+6,Zeta Group,80.00,/rate-limit/orders
+7,Eta Systems,42.00,/validation-error/orders
