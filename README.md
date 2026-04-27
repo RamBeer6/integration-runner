@@ -76,11 +76,11 @@ The run writes a structured report to `reports/run-summary.json`.
 
 ## Sample Data
 
-| File | Purpose |
-| --- | --- |
-| `sample-data/orders.csv` | Valid happy-path batch run |
+| File                                 | Purpose                                                         |
+| ------------------------------------ | --------------------------------------------------------------- |
+| `sample-data/orders.csv`             | Valid happy-path batch run                                      |
 | `sample-data/orders-with-errors.csv` | Mixed validation, transient, rate-limit, and permanent failures |
-| `sample-data/empty.csv` | Header-only input for empty-run behavior |
+| `sample-data/empty.csv`              | Header-only input for empty-run behavior                        |
 
 ## Docker
 
